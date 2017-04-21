@@ -20,16 +20,19 @@ public class Board {
         }
     }
 
+    // Returns the tile at that location
     public int tileAt(int row, int col) {
         if (row >= sideSize || row < 0 || col < 0 || col >= sideSize)
             throw new IndexOutOfBoundsException("Given coordinates do not correspond to any board tile.");
         return board[row][col];
     }
 
+    // Returns the board's side size
     public int size() {
         return sideSize;
     }
 
+    // Returns the number of tiles out of te correct position
     public int hamming() {
         int sum = 0;
         for (int row = 0; row < sideSize; row++) {
@@ -41,6 +44,8 @@ public class Board {
         return sum;
     }
 
+    // Returns the sum of manhattan distances of all tile to their position in
+    // the solved state.
     public int manhattan() {
         int sum = 0, man = 0, i, j, num;
         for (int row = 0; row < sideSize; row++) {
@@ -57,14 +62,37 @@ public class Board {
         return sum;
     }
 
+    // Returns if the board is in the solved state
     public boolean isGoal() {
-        return false;
+        return manhattan() == 0 && hamming() == 0;
     }
 
+    // Returns if the board can be solved by a sequence of legal moves
     public boolean isSolvable() {
-        return false;
+        int pos, pos2, inversions = 0, blankRow = 0;
+        for (int row = 0; row < sideSize; row++) {
+            for (int col = 0; col < sideSize; col++) {
+                pos = ((row * sideSize) + col);
+                if (board[row][col] == 0) blankRow = row;
+                for (int row2 = row; row2 < sideSize; row2++) {
+                    for (int col2 = col; col2 < sideSize; col2++) {
+                        pos2 = ((row2 * sideSize) + col2);
+                        if (board[row][col] < board[row2][col2] && pos > pos2)
+                            inversions++;
+                    }
+                }
+            }
+        }
+        if (sideSize % 2 == 0 && (inversions + blankRow) % 2 == 0)
+            return false;
+        if (sideSize % 2 != 0 && inversions % 2 != 0)
+            return false;
+        return true;
     }
 
+    // Returns if the board equals the given object
+    // The board is equal to the object if the object is a board and its tiles
+    // are at the same position as the board.
     public boolean equals(Object y) {
         boolean equal = true;
         try {
@@ -99,18 +127,19 @@ public class Board {
         };
     }
 
-
+    // Returns a textual representation of the board
     public String toString(){
         String str = Integer.toString(sideSize) + "\n";
-            for (int row = 0; row < sideSize; row++) {
-                for (int col = 0; col < sideSize; col++) {
-                    str += board[row][col] + "\t";
-                }
-                str += "\n";
+        for (int row = 0; row < sideSize; row++) {
+            for (int col = 0; col < sideSize; col++) {
+                str += board[row][col] + "\t";
             }
+            str += "\n";
+        }
         return str;
     }
 
+    // Unit test
     public static void main(String[] args) {
 
         StdOut.println("==============TESTING CLASS BOARD===============");
