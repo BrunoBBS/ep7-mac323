@@ -9,9 +9,11 @@ public class Board {
 
     private int[][] board;
     private int sideSize;
+    private int manhattan_cache;
 
     public Board(int[][] tiles) {
         sideSize = tiles.length;
+        manhattan_cache = -1;
         board = new int[sideSize][sideSize];
         for (int row = 0; row < sideSize; row++) {
             for (int col = 0; col < sideSize; col++) {
@@ -47,19 +49,23 @@ public class Board {
     // Returns the sum of manhattan distances of all tile to their position in
     // the solved state.
     public int manhattan() {
-        int sum = 0, man = 0, i, j, num;
-        for (int row = 0; row < sideSize; row++) {
-            for (int col = 0; col < sideSize; col++) {
-                num = board[row][col];
-                if (num != 0 ) {
-                    i = (num - 1)/sideSize;
-                    j = (num - 1) % sideSize;
-                    man = Math.abs(row - i) + Math.abs(col - j);
-                    sum += man;
+        if (manhattan_cache == -1) {
+            int sum = 0, man = 0, i, j, num;
+            for (int row = 0; row < sideSize; row++) {
+                for (int col = 0; col < sideSize; col++) {
+                    num = board[row][col];
+                    if (num != 0 ) {
+                        i = (num - 1)/sideSize;
+                        j = (num - 1) % sideSize;
+                        man = Math.abs(row - i) + Math.abs(col - j);
+                        sum += man;
+                    }
                 }
             }
+            return sum;
         }
-        return sum;
+        else
+            return manhattan_cache;
     }
 
     // Returns if the board is in the solved state
@@ -113,18 +119,41 @@ public class Board {
     public Iterable<Board> neighbors() {
         return new Iterable<Board> () {
             public Iterator<Board> iterator() {
-                return new Iterator<Board> () {
-                    public boolean hasNext() {
-                        return false;
-                    }
-                    public Board next() {
-                        return null;
-                    }
-                    public void remove(){
-                    }
-                };
+                return new BoardIterator();
             }
         };
+    }
+    private class BoardIterator implements Iterator<Board> {
+        int zeroCol, zeroRow, count;
+        LinkedStack<Board> ls;
+        int[][] tmp = new int[sideSize][sideSize];
+        BoardIterator() {
+            for (int row = 0; row < sideSize; row++) {
+                for (int col = 0; col < sideSize; col++) {
+                    if (board[row][col] == 0) {
+                        zeroCol = col;
+                        zeroRow = row;
+                    }
+                }
+            }
+            ls = new LinkedStack<Board>();
+            for(int i = 0; i < sideSize ; i++) {
+                for(int j = 0; j<sideSize ; j++) {
+                    tmp[i][j] = board.tileAt(i,j);
+                }
+            }
+            if (zeroRow - 1 >= 0){
+
+                ls.push()
+            }
+        }
+        public boolean hasNext() {
+        }
+        public Board next() {
+            return null;
+        }
+        public void remove(){
+        }
     }
 
     // Returns a textual representation of the board
