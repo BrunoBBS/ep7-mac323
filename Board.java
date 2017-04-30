@@ -170,7 +170,7 @@ public class Board {
                 tmp[zeroRow + 1][zeroCol] = tileAt(zeroRow + 1, zeroCol);
             }
             //LEFT
-            if (zeroCol - 1 < sideSize) {
+            if (zeroCol - 1 >= 0) {
                 tmp[zeroRow][zeroCol] = tmp[zeroRow][zeroCol - 1];
                 tmp[zeroRow][zeroCol - 1] = 0;
                 Board right = new Board(tmp);

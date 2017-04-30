@@ -10,7 +10,7 @@
  *      sliding block puzzle defined by the input file.
  *    - Renders a graphical animation of your program's output.
  *    - Uses the manhattan() method in Board to display the
- *      Manhattan distance at each stage of the solution. 
+ *      Manhattan distance at each stage of the solution.
  *
  *  by Martin Round. September 2014 Coursera Algorithms, Part I course
  *
@@ -47,7 +47,7 @@ public class SolverVisualizer {
 
     // text color
     private static final Color TEXT_COLOR = Color.BLACK;
-    
+
     private static int N;            // dimension of grid
     private static int[][] tileAt;   // number of tile at [row][column]
     private static int movingTile;   // which tile is moving, or 0 if none
@@ -55,7 +55,7 @@ public class SolverVisualizer {
     private static int currentMoves; // number of moves currently displayed
     private static int manhattan;    // Manhattan distance currently displayed
     private static String title;
-    
+
     // Draw one frame of animation.
     // If the start position is being displayed (movingTile == 0) or during
     // the PAUSE_TIME following each animated move, the display is unchanged.
@@ -82,7 +82,7 @@ public class SolverVisualizer {
         // StdDraw.square(N / 2.0, N / 2.0, N / 1.96);
         StdDraw.setPenColor(BOARD_COLOR);
         StdDraw.filledSquare(N / 2.0, N / 2.0, N / 1.96);
-   
+
         for (int row = 0; row < N; row++) {
             for (int col = 0; col < N; col++) {
                 double x = col + 0.5;
@@ -110,16 +110,16 @@ public class SolverVisualizer {
         StdDraw.text(0.775 * N, -0.06 * N, "Manhattan distance: " + manhattan);
         StdDraw.text(0.500 * N,  1.06 * N, title);
     }
-    
+
     private static void animateMove() {
         int milliseconds = 0;
         while (milliseconds < ANIMATE_TIME + PAUSE_TIME) {
             refresh(milliseconds);
             StdDraw.show(FRAME_TIME);
             milliseconds += FRAME_TIME;
-        }   
+        }
     }
-    
+
     public static void main(String[] args) {
         // for each command-line argument
         for (String filename : args) {
@@ -133,16 +133,16 @@ public class SolverVisualizer {
                     tileAt[i][j] = in.readInt();
                 }
             }
-            
+
             title = filename;
             movingTile = 0; // show initial state for first 'move time'
-            
+
             // solve the slider puzzle
             Board initial = new Board(tileAt);
             manhattan = initial.manhattan();
-            
+
             long start = System.currentTimeMillis();
-            
+
             if (!initial.isSolvable()) {
                 long now = System.currentTimeMillis();
                 title += " (no solution possible)";
@@ -174,6 +174,6 @@ public class SolverVisualizer {
                 StdDraw.show(ANIMATE_TIME + PAUSE_TIME);
             }
             StdOut.println(title);
-        }            
+        }
     }
 }
