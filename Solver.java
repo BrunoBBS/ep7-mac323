@@ -65,8 +65,10 @@ public class Solver {
 
     private class SolutionIterable implements Iterator<Board> {
        public boolean hasNext() {
+           return !plays.isEmpty();
        }
        public Board next() {
+           return plays.dequeue().board;
        }
        public void remove() {
        }
