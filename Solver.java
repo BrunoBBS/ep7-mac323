@@ -16,6 +16,7 @@ public class Solver {
         boolean different;
         BoardWrapper initialW = new BoardWrapper(steps_until_now, initial);
         BoardWrapper curr = initialW;
+        StdOut.println(curr.board);
         while (!curr.board.isGoal()) {
             // Puts the possible plays in the pq
             for (Board b : curr.board.neighbors()) {
@@ -23,15 +24,20 @@ public class Solver {
                 if (!b.equals(curr.board))
                     pq.insert(new BoardWrapper(steps_until_now + 1, b));
             }
+            // Uses only boards that have not appeared before
             different = true;
-            for (BoardWrapper b2 = pq.delMin(); different; b2 = pq.delMin()) {
-                for (BoardWrapper played : plays.iterator()) {
-                    if (b2.board.equals(played.board)) {
-                        different = false;
-                        break;
+            BoardWrapper b2 =curr;
+            if (!pq.isEmpty()){
+                for (b2 = pq.delMin(); different; b2 = pq.delMin()) {
+                    for (BoardWrapper played : plays) {
+                        if (b2.board.equals(played.board)) {
+                            different = false;
+                            break;
+                        }
                     }
                 }
             }
+            curr = b2;
         }
         StdOut.println("CABOOOOOU \n" + curr.board);
     }
