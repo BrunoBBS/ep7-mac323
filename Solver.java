@@ -4,28 +4,40 @@ import edu.princeton.cs.algs4.*;
 public class Solver {
 
     MinPQ<BoardWrapper> pq;
+    Queue<BoardWrapper> plays;
     private int steps_until_now;
 
     public Solver(Board initial) {
         if (initial == null) throw new NullPointerException("Initial board must be not null.");
         if (initial.isSolvable() == false) throw new  IllegalArgumentException("Initial board is not solvable.");
         steps_until_now = 0;
+        plays = new Queue<BoardWrapper>();
         pq = new MinPQ<BoardWrapper>();
-        BoardWrapper initialw = new BoardWrapper(steps_until_now, initial);
-        BoardWrapper curr = initialw;
+        boolean different;
+        BoardWrapper initialW = new BoardWrapper(steps_until_now, initial);
+        BoardWrapper curr = initialW;
         while (!curr.board.isGoal()) {
+            // Puts the possible plays in the pq
             for (Board b : curr.board.neighbors()) {
                 //critical optimization
                 if (!b.equals(curr.board))
                     pq.insert(new BoardWrapper(steps_until_now + 1, b));
             }
-            steps_until_now++;
+            different = true;
+            for (BoardWrapper b2 = pq.delMin(); different; b2 = pq.delMin()) {
+                for (BoardWrapper played : plays.iterator()) {
+                    if (b2.board.equals(played.board)) {
+                        different = false;
+                        break;
+                    }
+                }
+            }
         }
-        StdOut.println("CABOOOOOU " + curr.board);
+        StdOut.println("CABOOOOOU \n" + curr.board);
     }
 
     public int moves() {
-        return 2;
+        return steps_until_now;
     }
     public Iterable<Board> solution() {
         return null;

@@ -139,18 +139,51 @@ public class Board {
             ls = new LinkedStack<Board>();
             for(int i = 0; i < sideSize ; i++) {
                 for(int j = 0; j<sideSize ; j++) {
-                    tmp[i][j] = board.tileAt(i,j);
+                    tmp[i][j] = tileAt(i,j);
                 }
             }
-            if (zeroRow - 1 >= 0){
-
-                ls.push()
+            //TOP
+            if (zeroRow - 1 >= 0) {
+                tmp[zeroRow][zeroCol] = tmp[zeroRow - 1][zeroCol];
+                tmp[zeroRow - 1][zeroCol] = 0;
+                Board top = new Board(tmp);
+                ls.push(top);
+                tmp[zeroRow][zeroCol] = tileAt(zeroCol,zeroRow);
+                tmp[zeroRow - 1][zeroCol] = tileAt(zeroRow - 1, zeroCol);
+            }
+            //RIGHT
+            if (zeroCol + 1 < sideSize) {
+                tmp[zeroRow][zeroCol] = tmp[zeroRow][zeroCol + 1];
+                tmp[zeroRow][zeroCol + 1] = 0;
+                Board right = new Board(tmp);
+                ls.push(right);
+                tmp[zeroRow][zeroCol] = tileAt(zeroCol,zeroRow);
+                tmp[zeroRow][zeroCol + 1] = tileAt(zeroRow, zeroCol + 1);
+            }
+            //BOTTOM
+            if (zeroRow + 1 < sideSize) {
+                tmp[zeroRow][zeroCol] = tmp[zeroRow + 1][zeroCol];
+                tmp[zeroRow + 1][zeroCol] = 0;
+                Board right = new Board(tmp);
+                ls.push(right);
+                tmp[zeroRow][zeroCol] = tileAt(zeroCol,zeroRow);
+                tmp[zeroRow + 1][zeroCol] = tileAt(zeroRow + 1, zeroCol);
+            }
+            //LEFT
+            if (zeroCol - 1 < sideSize) {
+                tmp[zeroRow][zeroCol] = tmp[zeroRow][zeroCol - 1];
+                tmp[zeroRow][zeroCol - 1] = 0;
+                Board right = new Board(tmp);
+                ls.push(right);
+                tmp[zeroRow][zeroCol] = tileAt(zeroCol,zeroRow);
+                tmp[zeroRow][zeroCol - 1] = tileAt(zeroRow, zeroCol - 1);
             }
         }
         public boolean hasNext() {
+            return !ls.isEmpty();
         }
         public Board next() {
-            return null;
+            return ls.pop();
         }
         public void remove(){
         }
